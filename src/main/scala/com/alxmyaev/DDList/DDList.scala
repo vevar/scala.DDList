@@ -10,6 +10,8 @@ class DDList[T] {
 
   private val iterator: Iterator = new Iterator()
 
+  private var counter: Int = 0
+
   final class Iterator {
 
     private var currentBranch: Node[SubList[T]] = _
@@ -118,25 +120,41 @@ class DDList[T] {
       if (index == size) {
         add(element)
       } else {
-        get(index)
-        iterator.getCurrentPosition.value = element
+        getNodeByIndexFromBranch(getBranchByIndex(index), index).value = element
       }
     } else {
       throw new ArrayIndexOutOfBoundsException()
     }
   }
 
-  final def  get(index: Int): T = {
+  final private def getNodeByIndexFromBranch(currentBranch: Node[SubList[T]], index: Int): Node[T] = {
+    var currentNode: Node[T] = currentBranch.value.head
+
+    while (counter < index) {
+      currentNode = currentNode.pointerNext
+      counter = counter + 1
+    }
+
+    currentNode
+  }
+
+  final private def getBranchByIndex(index: Int): Node[SubList[T]] = {
+    counter = 0
+    var currentBranch: Node[SubList[T]] = head
+    var sizeCurrentBranch: Int = currentBranch.value.getCurrentSize
+
+    while (counter < index - sizeCurrentBranch) {
+      currentBranch = currentBranch.pointerNext
+      sizeCurrentBranch = currentBranch.value.getCurrentSize
+      counter = counter + sizeCurrentBranch
+    }
+
+    currentBranch
+  }
+
+  final def get(index: Int): T = {
     if (index < size) {
-      var counter: Int = 0
-      iterator.begin()
-      while (counter < index) {
-        iterator.next()
-        counter = counter + 1
-      }
-
-      iterator.getCurrentPosition.value
-
+      getNodeByIndexFromBranch(getBranchByIndex(index), index).value
     } else {
       throw new ArrayIndexOutOfBoundsException()
     }
@@ -168,12 +186,12 @@ class DDList[T] {
 
   final def remove(index: Int): Unit = {
     if (index < size) {
-      get(index)
+      val removedBranch = getBranchByIndex(index)
 
-      if (iterator.getCurrentBranch.value.getCurrentSize == 1) {
-        removeBranch(iterator.getCurrentBranch)
+      if (removedBranch.value.getCurrentSize == 1) {
+        removeBranch(removedBranch)
       } else {
-        removeNode(iterator.getCurrentPosition)
+        removeNode(getNodeByIndexFromBranch(removedBranch, index))
       }
     } else {
       throw new ArrayIndexOutOfBoundsException()
