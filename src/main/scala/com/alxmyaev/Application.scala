@@ -11,4 +11,6 @@ object Application extends App {
   println(ddList.get(5))
   println(ddList.get(10))
   println(ddList.get(0))
+
+  ddList.forEach(println)
 }

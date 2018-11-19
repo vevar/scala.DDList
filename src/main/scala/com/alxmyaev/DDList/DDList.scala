@@ -8,8 +8,6 @@ class DDList[T] {
 
   private var size: Int = 0
 
-  private val iterator: Iterator = new Iterator()
-
   private var counter: Int = 0
 
   final class Iterator {
@@ -23,15 +21,18 @@ class DDList[T] {
 
     def begin(): Node[T] = {
       currentBranch = head
-
-      currentPosition = head.value.head
+      if (head != null) {
+        currentPosition = head.value.head
+      }
       currentPosition
     }
 
     def end(): Node[T] = {
       currentBranch = tail
 
-      currentPosition = tail.value.tail
+      if (head != null) {
+        currentPosition = tail.value.tail
+      }
       currentPosition
     }
 
@@ -52,12 +53,18 @@ class DDList[T] {
     }
 
     def back(): Node[T] = {
-      if (currentPosition != currentBranch.value.head) {
-        currentPosition = currentPosition.pointerBack
-      } else {
-        currentBranch = currentBranch.pointerBack
+      if (currentPosition == null || currentBranch == null) {
+        currentBranch = tail
         currentPosition = currentBranch.value.tail
+      } else {
+        if (currentPosition != currentBranch.value.head) {
+          currentPosition = currentPosition.pointerBack
+        } else {
+          currentBranch = currentBranch.pointerBack
+          currentPosition = currentBranch.value.tail
+        }
       }
+
       currentPosition
     }
 
@@ -70,6 +77,12 @@ class DDList[T] {
     }
 
     def forEach[U](function: T => U): Unit = {
+      if (size > 0) {
+        function(begin().value)
+        while (!isEnd) {
+          function(next().value)
+        }
+      }
     }
   }
 
@@ -212,7 +225,8 @@ class DDList[T] {
   }
 
   final def forEach[U](function: T => U): Unit = {
-    iterator.forEach(function)
+    new Iterator().forEach(function)
   }
+
 
 }
