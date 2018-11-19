@@ -17,6 +17,10 @@ class DDList[T] {
     private var currentBranch: Node[SubList[T]] = _
     private var currentPosition: Node[T] = _
 
+    def isEnd: Boolean = {
+      currentPosition == tail.value.tail
+    }
+
     def begin(): Node[T] = {
       currentBranch = head
 
@@ -32,12 +36,18 @@ class DDList[T] {
     }
 
     def next(): Node[T] = {
-      if (currentPosition != currentBranch.value.tail) {
-        currentPosition = currentPosition.pointerNext
-      } else {
-        currentBranch = currentBranch.pointerNext
+      if (currentPosition == null || currentBranch == null) {
+        currentBranch = head
         currentPosition = currentBranch.value.head
+      } else {
+        if (currentPosition != currentBranch.value.tail) {
+          currentPosition = currentPosition.pointerNext
+        } else {
+          currentBranch = currentBranch.pointerNext
+          currentPosition = currentBranch.value.head
+        }
       }
+
       currentPosition
     }
 
@@ -57,6 +67,9 @@ class DDList[T] {
 
     def getCurrentPosition: Node[T] = {
       currentPosition
+    }
+
+    def forEach[U](function: T => U): Unit = {
     }
   }
 
@@ -196,6 +209,10 @@ class DDList[T] {
     } else {
       throw new ArrayIndexOutOfBoundsException()
     }
+  }
+
+  final def forEach[U](function: T => U): Unit = {
+    iterator.forEach(function)
   }
 
 }
