@@ -1,5 +1,7 @@
 package main.scala.com.alxmyaev.DDList
 
+import java.util
+
 class DDList[T] {
   private val DEFAULT_MAX_SIZE_BRANCHES = 3
 
@@ -228,5 +230,18 @@ class DDList[T] {
     new Iterator().forEach(function)
   }
 
+  def sort(compareFunction: Ordering[T]): DDList[T] = {
+    if (compareFunction != null) {
+      val sortedList = new DDList[T]()
 
+      val sortList = new util.ArrayList[T]()
+      forEach(sortList.add)
+      sortList.sort(compareFunction)
+
+      sortList.forEach(sortedList.add)
+      sortedList
+    } else {
+      null
+    }
+  }
 }
