@@ -1,4 +1,4 @@
-package main.scala.com.alxmyaev.DDList
+package main.scala.com.alxmyaev.model.DDList
 
 class MaxSizeSubListException extends Exception{
 

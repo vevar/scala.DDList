@@ -1,4 +1,4 @@
-package main.scala.com.alxmyaev.DDList
+package main.scala.com.alxmyaev.model.DDList
 
 final class Node[T](var value : T ) {
   var pointerNext : Node[T] = _
