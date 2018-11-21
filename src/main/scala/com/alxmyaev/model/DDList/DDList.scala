@@ -2,7 +2,7 @@ package main.scala.com.alxmyaev.model.DDList
 
 import java.util
 
-class DDList[T] {
+class DDList[T] extends IList [T]{
   private val DEFAULT_MAX_SIZE_BRANCHES = 3
 
   private var head: Node[SubList[T]] = _
@@ -80,7 +80,6 @@ class DDList[T] {
 
     def forEach[U](function: T => U): Unit = {
       if (size > 0) {
-        function(begin().value)
         while (!isEnd) {
           function(next().value)
         }
@@ -129,11 +128,11 @@ class DDList[T] {
     }
   }
 
-  final def getSize: Int = {
+  final override def getSize: Int = {
     size
   }
 
-  final def add(element: T): Unit = {
+  final override def add(element: T): Unit = {
     val node: Node[T] = new Node[T](element)
     if (head == null) {
       addToHead(node)
@@ -143,7 +142,7 @@ class DDList[T] {
     size = size + 1
   }
 
-  final def add(element: T, index: Int): Unit = {
+  final override def add(element: T, index: Int): Unit = {
     if (index <= size) {
       if (index == size) {
         add(element)
@@ -180,7 +179,7 @@ class DDList[T] {
     currentBranch
   }
 
-  final def get(index: Int): T = {
+  final override def get(index: Int): T = {
     if (index < size) {
       getNodeByIndexFromBranch(getBranchByIndex(index), index).value
     } else {
@@ -208,19 +207,23 @@ class DDList[T] {
     backNode.pointerNext = nextNode
     nextNode.pointerBack = backNode
 
-    removedNode.pointerNext = null
-    removedNode.pointerBack = null
+    if (removedNode == head) {
+      head = nextNode
+    } else if (removedNode == tail) {
+      tail = backNode
+    }
   }
 
-  final def remove(index: Int): Unit = {
+  final override def remove(index: Int): Unit = {
     if (index < size) {
       val removedBranch = getBranchByIndex(index)
 
       if (removedBranch.value.getCurrentSize == 1) {
         removeBranch(removedBranch)
       } else {
-        removeNode(getNodeByIndexFromBranch(removedBranch, index))
+        removedBranch.value.remove(index - counter)
       }
+      size = size - 1
     } else {
       throw new ArrayIndexOutOfBoundsException()
     }
@@ -230,7 +233,7 @@ class DDList[T] {
     new Iterator().forEach(function)
   }
 
-  def sort(compareFunction: Ordering[T]): DDList[T] = {
+  override def sort(compareFunction: Ordering[T]): DDList[T] = {
     if (compareFunction != null) {
       val sortedList = new DDList[T]()
 

@@ -11,6 +11,30 @@ final class SubList[sT](var maxSize: Int) {
     currentSize
   }
 
+  def remove(index: Int): Unit = {
+
+    var currentPosition: Node[sT] = head
+    var counter = 0
+    while (counter < index) {
+      currentPosition = currentPosition.pointerNext
+      counter = counter + 1
+    }
+
+    val removedNode: Node[sT] = currentPosition
+    val backNode: Node[sT] = removedNode.pointerBack
+    val nextNode: Node[sT] = removedNode.pointerNext
+
+    backNode.pointerNext = nextNode
+    nextNode.pointerBack = backNode
+
+    if (removedNode == head) {
+      head = nextNode
+    } else if (removedNode == tail) {
+      tail = backNode
+    }
+
+    currentSize = currentSize - 1
+  }
 
   def add(node: Node[sT]): Unit = {
     if (currentSize < maxSize && node != null) {
@@ -20,7 +44,7 @@ final class SubList[sT](var maxSize: Int) {
         addToTail(node)
       }
       currentSize = currentSize + 1
-    }else{
+    } else {
       throw new MaxSizeSubListException()
     }
 

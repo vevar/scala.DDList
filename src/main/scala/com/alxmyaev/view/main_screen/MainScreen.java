@@ -1,5 +1,7 @@
 package main.scala.com.alxmyaev.view.main_screen;
 
+import main.scala.com.alxmyaev.model.DDList.IList;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,26 +16,39 @@ final class MainScreen extends JFrame {
     private final static String TEXT_BUTTON_SORT = "Sort data";
 
 
+    private final JTextArea textArea;
+
     MainScreen(final MainController mainController) {
         final JPanel mainPanel = new JPanel();
         setContentPane(mainPanel);
         mainPanel.setLayout(new BorderLayout());
 
         final JPanel modelPanel = new JPanel();
-
         modelPanel.setLayout(new BorderLayout());
-        final JTextArea textArea = new JTextArea();
+
+        textArea = new JTextArea();
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
         modelPanel.add(textArea, BorderLayout.CENTER);
+
         final JPanel controlModelPanel = new JPanel();
         controlModelPanel.setLayout(new FlowLayout());
+
         final JButton buttonRandomGenerationData = new JButton(TEXT_BUTTON_RANDOM_GENERATOR);
-        buttonRandomGenerationData.addActionListener(e -> mainController.showRandomGeneratorScreen());
+        buttonRandomGenerationData.addActionListener(e -> mainController.showRandomGeneratorDialog());
         controlModelPanel.add(buttonRandomGenerationData);
+
         final JButton buttonAddElement = new JButton(TEXT_BUTTON_ADD_ELEMENT);
+        buttonAddElement.addActionListener(e -> mainController.showAddElementDialog());
         controlModelPanel.add(buttonAddElement);
+
         final JButton buttonRemoveElement = new JButton(TEXT_BUTTON_REMOVE_ELEMENT);
+        buttonRemoveElement.addActionListener(e -> mainController.showRemoveElementDialog());
         controlModelPanel.add(buttonRemoveElement);
+
         final JButton buttonSort = new JButton(TEXT_BUTTON_SORT);
+        buttonSort.addActionListener(e -> mainController.sortData());
         controlModelPanel.add(buttonSort);
 
         modelPanel.add(controlModelPanel, BorderLayout.PAGE_END);
@@ -49,5 +64,16 @@ final class MainScreen extends JFrame {
         endPanel.add(buttonLoadData);
 
         mainPanel.add(endPanel, BorderLayout.PAGE_END);
+    }
+
+    void updateModel(final IList<Integer> modelData) {
+        textArea.setText("");
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < modelData.getSize(); i++) {
+            text.append(modelData.get(i)).append(" ");
+        }
+        textArea.setText(text.toString());
+
+
     }
 }
