@@ -69,6 +69,11 @@ final class MainScreen extends JFrame {
     void updateModel(final IList<Integer> modelData) {
         textArea.setText("");
         StringBuilder text = new StringBuilder();
+
+//        modelData.forEach(e -> {
+//            text.append(e).append(" ");
+//            return null;
+//        });
         for (int i = 0; i < modelData.getSize(); i++) {
             text.append(modelData.get(i)).append(" ");
         }

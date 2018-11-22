@@ -5,6 +5,9 @@ import main.scala.com.alxmyaev.model.DDList.IList;
 import main.scala.com.alxmyaev.view.dialog.AddElementDialog;
 import main.scala.com.alxmyaev.view.dialog.RandomGeneratorDialog;
 import main.scala.com.alxmyaev.view.dialog.RemoveElementDialog;
+import scala.Function1;
+import scala.Some;
+import scala.math.Ordering;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,6 +78,13 @@ final public class MainController {
 
     void sortData() {
 
+        modelData = modelData.sort(new Ordering<Integer>() {
+            @Override
+            public int compare(Integer x, Integer y) {
+                return x - y;
+            }
+        });
+        mainScreen.updateModel(modelData);
     }
 
     public void addNewElementToData(int element) {

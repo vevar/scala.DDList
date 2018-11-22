@@ -2,7 +2,7 @@ package main.scala.com.alxmyaev.model.DDList
 
 import java.util
 
-class DDList[T] extends IList [T]{
+class DDList[T] extends IList[T] {
   private val DEFAULT_MAX_SIZE_BRANCHES = 3
 
   private var head: Node[SubList[T]] = _
@@ -170,10 +170,10 @@ class DDList[T] extends IList [T]{
     var currentBranch: Node[SubList[T]] = head
     var sizeCurrentBranch: Int = currentBranch.value.getCurrentSize
 
-    while (counter < index - sizeCurrentBranch) {
+    while (index > counter + sizeCurrentBranch - 1) {
+      counter = counter + sizeCurrentBranch
       currentBranch = currentBranch.pointerNext
       sizeCurrentBranch = currentBranch.value.getCurrentSize
-      counter = counter + sizeCurrentBranch
     }
 
     currentBranch
@@ -181,7 +181,7 @@ class DDList[T] extends IList [T]{
 
   final override def get(index: Int): T = {
     if (index < size) {
-      getNodeByIndexFromBranch(getBranchByIndex(index), index).value
+      getBranchByIndex(index).value.get(index - counter)
     } else {
       throw new ArrayIndexOutOfBoundsException()
     }
@@ -209,8 +209,14 @@ class DDList[T] extends IList [T]{
 
     if (removedNode == head) {
       head = nextNode
+      if (removedNode == tail) {
+        tail = nextNode
+      }
     } else if (removedNode == tail) {
       tail = backNode
+      if (removedNode == head) {
+        head = backNode
+      }
     }
   }
 

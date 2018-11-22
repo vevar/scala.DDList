@@ -36,6 +36,17 @@ final class SubList[sT](var maxSize: Int) {
     currentSize = currentSize - 1
   }
 
+  def get(index: Int): sT = {
+    var counter = 0
+    var currentPosition = head
+    while (counter < index) {
+      currentPosition = currentPosition.pointerNext
+      counter = counter + 1
+    }
+    currentPosition.value
+  }
+
+
   def add(node: Node[sT]): Unit = {
     if (currentSize < maxSize && node != null) {
       if (head == null) {

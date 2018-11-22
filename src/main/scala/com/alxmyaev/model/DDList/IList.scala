@@ -12,4 +12,6 @@ trait IList[T] {
   def sort(compareFunction: Ordering[T]): IList[T]
 
   def getSize: Int
+
+  def forEach[U](function: T => U): Unit
 }
