@@ -29,6 +29,7 @@ public class AddElementDialog extends JDialog {
                     dispose();
                 }
         );
+
         add(buttonAdd,BorderLayout.PAGE_END);
     }
 

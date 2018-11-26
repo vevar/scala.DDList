@@ -1,6 +1,6 @@
 package main.scala.com.alxmyaev.model.DDList
 
-final class SubList[sT](var maxSize: Int) {
+final class SubList[sT](var maxSize: Int) extends Serializable  {
 
   var head: Node[sT] = _
   var tail: Node[sT] = _
@@ -45,7 +45,6 @@ final class SubList[sT](var maxSize: Int) {
     }
     currentPosition.value
   }
-
 
   def add(node: Node[sT]): Unit = {
     if (currentSize < maxSize && node != null) {

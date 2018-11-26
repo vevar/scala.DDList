@@ -2,15 +2,12 @@ package main.scala.com.alxmyaev.view.main_screen;
 
 import main.scala.com.alxmyaev.model.DDList.DDList;
 import main.scala.com.alxmyaev.model.DDList.IList;
-import main.scala.com.alxmyaev.view.dialog.AddElementDialog;
-import main.scala.com.alxmyaev.view.dialog.RandomGeneratorDialog;
-import main.scala.com.alxmyaev.view.dialog.RemoveElementDialog;
-import scala.Function1;
-import scala.Some;
+import main.scala.com.alxmyaev.view.dialog.*;
 import scala.math.Ordering;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 
 final public class MainController {
@@ -44,11 +41,8 @@ final public class MainController {
         randomGeneratorDialog.setVisible(true);
     }
 
-    public void setNewData(final ArrayList<Integer> data) {
-        modelData = new DDList<>();
-        for (Integer num : data) {
-            modelData.add(num);
-        }
+    public void setModelData(final IList<Integer> data) {
+        modelData = data;
         mainScreen.updateModel(modelData);
     }
 
@@ -77,7 +71,6 @@ final public class MainController {
     }
 
     void sortData() {
-
         modelData = modelData.sort(new Ordering<Integer>() {
             @Override
             public int compare(Integer x, Integer y) {
@@ -95,5 +88,36 @@ final public class MainController {
     public void removeElementByIndex(int index) {
         modelData.remove(index);
         mainScreen.updateModel(modelData);
+    }
+
+    public void saveDataToFile(final IList list, final File file) throws IOException {
+        final FileOutputStream fileOutputStream = new FileOutputStream(file);
+        final ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+        outputStream.writeObject(list);
+
+        outputStream.close();
+        fileOutputStream.close();
+    }
+
+    public IList loadDataFromFile(final File file) throws IOException, ClassNotFoundException {
+        final FileInputStream fileInputStream = new FileInputStream(file);
+        final ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
+        final IList data = (IList) inputStream.readObject();
+        inputStream.close();
+        fileInputStream.close();
+
+        return data;
+    }
+
+    void showSaveDataDialog() {
+        final SaveDataDialog saveDataDialog = new SaveDataDialog(this, modelData, mainScreen, true);
+        saveDataDialog.setSize(new Dimension(WIDTH_DIALOG, HEIGHT_DIALOG));
+        saveDataDialog.setVisible(true);
+    }
+
+    void showLoadDialog() {
+        final LoadDataDialog loadDataDialog = new LoadDataDialog(this, mainScreen, true);
+        loadDataDialog.setSize(new Dimension(WIDTH_DIALOG, HEIGHT_DIALOG));
+        loadDataDialog.setVisible(true);
     }
 }

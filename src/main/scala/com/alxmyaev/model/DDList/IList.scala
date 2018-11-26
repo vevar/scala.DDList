@@ -1,6 +1,6 @@
 package main.scala.com.alxmyaev.model.DDList
 
-trait IList[T] {
+trait IList[T] extends Serializable{
   def add(element: T): Unit
 
   def add(element: T, index: Int): Unit

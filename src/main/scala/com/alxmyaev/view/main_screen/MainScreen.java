@@ -59,7 +59,9 @@ final class MainScreen extends JFrame {
         endPanel.setLayout(new FlowLayout());
 
         final JButton buttonSaveData = new JButton(TEXT_BUTTON_SAVE);
+        buttonSaveData.addActionListener(e-> mainController.showSaveDataDialog());
         final JButton buttonLoadData = new JButton(TEXT_BUTTON_LOAD);
+        buttonLoadData.addActionListener(e -> mainController.showLoadDialog());
         endPanel.add(buttonSaveData);
         endPanel.add(buttonLoadData);
 
@@ -68,7 +70,7 @@ final class MainScreen extends JFrame {
 
     void updateModel(final IList<Integer> modelData) {
         textArea.setText("");
-        StringBuilder text = new StringBuilder();
+        final StringBuilder text = new StringBuilder();
 
 //        modelData.forEach(e -> {
 //            text.append(e).append(" ");
@@ -78,7 +80,5 @@ final class MainScreen extends JFrame {
             text.append(modelData.get(i)).append(" ");
         }
         textArea.setText(text.toString());
-
-
     }
 }

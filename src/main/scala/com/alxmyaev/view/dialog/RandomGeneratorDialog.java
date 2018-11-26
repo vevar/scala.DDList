@@ -1,6 +1,7 @@
 package main.scala.com.alxmyaev.view.dialog;
 
 
+import main.scala.com.alxmyaev.model.DDList.DDList;
 import main.scala.com.alxmyaev.view.main_screen.MainController;
 
 import javax.swing.*;
@@ -74,11 +75,11 @@ public class RandomGeneratorDialog extends JDialog {
             final int from = Integer.parseInt(textFieldFrom.getText());
             final int to = Integer.parseInt(textFieldTo.getText());
             final int size = Integer.parseInt(textFieldSizeData.getText());
-            ArrayList<Integer> data = new ArrayList<>();
+            DDList<Integer> data = new DDList<>();
             for (int i = 0; i < size; i++) {
                 data.add((int) (from + Math.random() * to));
             }
-            mainController.setNewData(data);
+            mainController.setModelData(data);
             dispose();
         });
         gridBagConstraints.gridx = 0;
